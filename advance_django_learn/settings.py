@@ -164,11 +164,23 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "formatter": "verbose",
             "include_html": True,
+        },
+        "logging_learn_file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "logs/logging_learn.log",
+            "formatter": "verbose"
+        },
+        "template_file": {
+            "level": "ERROR",
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "logs/template.log",
+            "formatter": "simple"
         }
     },
     "loggers": {
         "logging_learn": {
-            "handlers": ["console", "file", "mail_admins"],
+            "handlers": ["console", "logging_learn_file", "mail_admins"],
             "level": "INFO",
             "propagate": True
         },
@@ -178,7 +190,7 @@ LOGGING = {
             "propagate": True,
         },
         "django.template": {
-            "handlers": [ "file"],
+            "handlers": [ "template_file"],
             "level": "ERROR",
             "propagate": True,
         }
