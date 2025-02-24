@@ -128,6 +128,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
+LOGGING_FILE_HANDLER = 'logging.FileHandler'
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -154,7 +156,7 @@ LOGGING = {
         },
         "file": {
             "level": "INFO",
-            "class": "logging.FileHandler",
+            "class": LOGGING_FILE_HANDLER,
             "filename": BASE_DIR / "logs/django.log",
             "formatter": "verbose"
         },
@@ -167,13 +169,13 @@ LOGGING = {
         },
         "logging_learn_file": {
             "level": "INFO",
-            "class": "logging.FileHandler",
+            "class": LOGGING_FILE_HANDLER,
             "filename": BASE_DIR / "logs/logging_learn.log",
             "formatter": "verbose"
         },
         "template_file": {
             "level": "ERROR",
-            "class": "logging.FileHandler",
+            "class": LOGGING_FILE_HANDLER,
             "filename": BASE_DIR / "logs/template.log",
             "formatter": "simple"
         }
