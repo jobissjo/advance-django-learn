@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+import colorlog
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,13 +35,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'logging_learn'
+    'rest_framework',
+    'adrf',
+    "drf_spectacular",
+    'logging_learn',
+    "api_testing",
+    "learn_celery",
+    'adrf_learn'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +79,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'advance_django_learn.wsgi.application'
+# WSGI_APPLICATION = 'advance_django_learn.wsgi.application'
+ASGI_APPLICATION = 'advance_django_learn.asgi.application'
 
 
 # Database
@@ -149,9 +158,26 @@ LOGGING = {
         "verbose": {
             "format": "{levelname} {asctime:s} {name} {module}.py (line {lineno:d}) {funcName} {message}",
             "style": "{"
+        },
+        "colorized": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "%(log_color)s%(levelname)-8s %(asctime)s %(name)s %(message)s",
+            "log_colors": {
+                "DEBUG": "cyan",
+                "INFO": "green",
+                "WARNING": "yellow",
+                "ERROR": "red",
+                "CRITICAL": "bold_red",
+            }
         }
     },
     "handlers": {
+        "console_colored": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "colorized",
+
+        },
         "console": {
             "level": "INFO",
             "class": "logging.StreamHandler",
@@ -181,11 +207,17 @@ LOGGING = {
             "class": LOGGING_FILE_HANDLER,
             "filename": BASE_DIR / "logs/template.log",
             "formatter": "simple"
+        },
+        "adrf_learn_file":{
+            "level": "INFO",
+            "class": LOGGING_FILE_HANDLER,
+            "filename": BASE_DIR / "logs/adrf_learn.log",
+            "formatter": "simple"
         }
     },
     "loggers": {
         "logging_learn": {
-            "handlers": ["console", "logging_learn_file", "mail_admins"],
+            "handlers": ["console_colored", "logging_learn_file", "mail_admins"],
             "level": "INFO",
             "propagate": True
         },
@@ -198,8 +230,17 @@ LOGGING = {
             "handlers": [ "template_file"],
             "level": "ERROR",
             "propagate": True,
+        },
+        "adrf_learn": {
+            "handlers": ["adrf_learn_file", "console_colored" ],
+            "level": "INFO",
+            "propagate": True,
         }
     }
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"
 }
 
 # ADMIN 
@@ -223,3 +264,12 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = True  
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') 
+
+# OPEN API SCHEMA VALIDATION
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Advance Django Learn",
+    "DESCRIPTION": "API Documentation for Advance Django Learn",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False
+}
