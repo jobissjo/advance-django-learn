@@ -23,6 +23,7 @@ urlpatterns = [
     path('log/', include('logging_learn.urls')),
     path('celery/', include('learn_celery.urls')),
     path('api/v1/', include('adrf_learn.urls')),
+    path('api/v2/', include('integrate_tortoise_orm.urls')),
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:

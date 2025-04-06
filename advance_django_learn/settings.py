@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'logging_learn',
     "api_testing",
     "learn_celery",
-    'adrf_learn'
+    'adrf_learn',
+    "integrate_tortoise_orm"
 ]
 
 MIDDLEWARE = [
@@ -93,6 +94,18 @@ DATABASES = {
     }
 }
 
+TORTOISE_ORM = {
+    'connections': {
+        'tortoise_db': f"sqlite:///{BASE_DIR/'tortoise_db.sqlite3'}"
+    },
+    "apps": {
+        "async_app": {
+            "models": ["integrate_tortoise_orm.models"],
+            "default_connection": "tortoise_db",
+        }
+    },
+    "use_tz": False
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
